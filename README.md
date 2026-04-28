@@ -1,6 +1,8 @@
+NOTE: This is a fork of (https://github.com/long2ice/fastapi-limiter), currently because the original maintainer [@long2ice](https://github.com/long2ice) has not published the latest version which supports FastAPI middleware.
+
 <div align="center">
 
-# Python Package Template
+# AB FastAPI Limiter
 
 FastAPI-Limiter is a rate limiting tool for [fastapi](https://github.com/tiangolo/fastapi) routes, powered by [pyrate-limiter](https://github.com/vutran1710/PyrateLimiter).
 
@@ -17,23 +19,9 @@ FastAPI-Limiter is a rate limiting tool for [fastapi](https://github.com/tiangol
 
 🦜🕸️
 
-[![CI](https://github.com/auth-broker/package-template/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/auth-broker/package-template/actions/workflows/ci.yaml)
+[![CI](https://github.com/auth-broker/package-fastapi-limiter/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/auth-broker/package-fastapi-limiter/actions/workflows/ci.yaml)
 
 </div>
-
-______________________________________________________________________
-
-## Template Checklist
-
-- [ ] Rename module `src/ab_core/template` ->
-  `src/ab_core/your_package_name`
-- [ ] Rename tests module `src/ab_core/template` ->
-  `src/ab_core/your_package_name`
-- [ ] Update `pyproject.toml`: `[project]` section based on your package name
-  / versioning etc.
-- [ ] Update `README.md` references of `python-package-template` ->
-  `your-package-name`
-- [ ] Remove this section
 
 ______________________________________________________________________
 
@@ -133,7 +121,7 @@ command:
 **Using pip**:
 
 ```shell
-pip install python-package-template
+pip install ab-fastapi-limiter
 ```
 
 **Using UV**
@@ -144,7 +132,7 @@ provide the full url. https://github.com/astral-sh/uv/issues/10140
 Add the dependency
 
 ```shell
-uv add python-package-template
+uv add ab-fastapi-limiter
 ```
 
 **Using poetry**:
@@ -152,7 +140,7 @@ uv add python-package-template
 Then run the following command to install the package:
 
 ```shell
-poetry add python-package-template
+poetry add ab-fastapi-limiter
 ```
 
 ### How tos
@@ -338,4 +326,4 @@ We publish to PyPI using Github releases. Steps are as follows:
    will trigger the `publish` workflow. In the Release window, type in the
    version number and it will prompt to create a new tag.
 1. Verify the release in
-   [PyPI](https://pypi.org/project/python-package-template/)
+   [PyPI](https://pypi.org/project/ab-fastapi-limiter/)
