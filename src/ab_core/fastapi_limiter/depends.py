@@ -1,10 +1,12 @@
+"""Dependency-based rate limiting helpers for FastAPI endpoints."""
+
 from pyrate_limiter import Limiter
 from starlette.requests import Request
 from starlette.responses import Response
 from starlette.websockets import WebSocket
 
-from fastapi_limiter.callback import default_callback
-from fastapi_limiter.identifier import default_identifier
+from ab_core.fastapi_limiter.callback import default_callback
+from ab_core.fastapi_limiter.identifier import default_identifier
 
 
 class _BaseRateLimiter:
@@ -24,7 +26,10 @@ class _BaseRateLimiter:
 
 
 class RateLimiter(_BaseRateLimiter):
+    """Rate-limit HTTP requests when used as a dependency."""
+
     async def __call__(self, request: Request, response: Response):
+        """Enforce the configured rate limit for the current request."""
         if self.skip and await self.skip(request):
             return
         rate_key = await self.identifier(request)
@@ -34,7 +39,10 @@ class RateLimiter(_BaseRateLimiter):
 
 
 class WebSocketRateLimiter(_BaseRateLimiter):
+    """Rate-limit WebSocket messages keyed by connection and context."""
+
     async def __call__(self, ws: WebSocket, context_key: str = ""):
+        """Enforce the configured rate limit for a WebSocket operation."""
         if self.skip and await self.skip(ws):
             return
         rate_key = await self.identifier(ws)

@@ -1,0 +1,40 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "install",
+            "type": "shell",
+            "command": "make install",
+            "group": "build",
+            "detail": "install required dependencies on bare metal"
+        },
+        {
+            "label": "format",
+            "type": "shell",
+            "command": "make format",
+            "group": "build",
+            "detail": "Run the formatter on bare metal"
+        },
+        {
+            "label": "lint",
+            "type": "shell",
+            "command": "make lint",
+            "group": "build",
+            "detail": "run the linter on bare metal"
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "make test",
+            "group": "build",
+            "detail": "run unit tests on bare metal"
+        },
+        {
+            "label": "publish",
+            "type": "shell",
+            "command": "make publish",
+            "group": "build",
+            "detail": "Build & publish the package to Nexus"
+        }
+    ]
+}

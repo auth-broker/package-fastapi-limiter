@@ -1,0 +1,66 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "pytest",
+      "type": "python",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["-vv", "--no-cov"],
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONASYNCIODEBUG": "1" // optional: helps with debugging asyncio
+      }
+    },
+    {
+      "name": "pytest: current module",
+      "type": "python",
+      "request": "launch",
+      "module": "pytest",
+      // run pytest on the directory that contains the file in the active editor
+      "args": ["-vv", "${fileDirname}", "--no-cov"],
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONASYNCIODEBUG": "1" // optional: helps with debugging asyncio
+      }
+    },
+    {
+      "name": "pytest: current file",
+      "type": "python",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["-vv", "${relativeFile}", "--no-cov"],
+      "justMyCode": false,
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONASYNCIODEBUG": "1" // optional: helps with debugging asyncio
+      }
+    },
+    {
+      "name": "pytest: specify case in current file",
+      "type": "python",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["-vv", "${relativeFile}::${input:testName}", "--no-cov"],
+      "justMyCode": false,
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONASYNCIODEBUG": "1" // optional: helps with debugging asyncio
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "testName",
+      "type": "promptString",
+      "description": "Enter test name or leave blank to run the whole file",
+      "default": ""
+    }
+  ]
+}

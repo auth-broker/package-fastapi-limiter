@@ -1,10 +1,12 @@
+"""Example FastAPI app demonstrating dependency-based rate limiting."""
+
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, WebSocket
 from fastapi.requests import Request
 from pyrate_limiter import Duration, Limiter, Rate
 from starlette.websockets import WebSocketDisconnect
 
-from fastapi_limiter.depends import RateLimiter, WebSocketRateLimiter
+from ab_core.fastapi_limiter.depends import RateLimiter, WebSocketRateLimiter
 
 app = FastAPI()
 
@@ -14,6 +16,7 @@ app = FastAPI()
     dependencies=[Depends(RateLimiter(limiter=Limiter(Rate(2, Duration.SECOND * 5))))],
 )
 async def index_get():
+    """Return a basic response for GET requests."""
     return {"msg": "Hello World"}
 
 
@@ -22,6 +25,7 @@ async def index_get():
     dependencies=[Depends(RateLimiter(limiter=Limiter(Rate(1, Duration.SECOND * 5))))],
 )
 async def index_post():
+    """Return a basic response for POST requests."""
     return {"msg": "Hello World"}
 
 
@@ -33,25 +37,27 @@ async def index_post():
     ],
 )
 async def multiple():
+    """Return a response behind multiple rate-limiter dependencies."""
     return {"msg": "Hello World"}
 
 
 async def skip(request: Request):
+    """Skip rate limiting for the dedicated skip route."""
     return request.scope["path"] == "/skip"
 
 
 @app.get(
     "/skip",
-    dependencies=[
-        Depends(RateLimiter(limiter=Limiter(Rate(1, Duration.SECOND * 5)), skip=skip))
-    ],
+    dependencies=[Depends(RateLimiter(limiter=Limiter(Rate(1, Duration.SECOND * 5)), skip=skip))],
 )
 async def skip_route():
+    """Return a response from a route excluded from limiting."""
     return {"msg": "This route skips rate limiting"}
 
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
+    """Handle a WebSocket endpoint with message-level rate limiting."""
     await websocket.accept()
     ratelimit = WebSocketRateLimiter(limiter=Limiter(Rate(1, Duration.SECOND * 5)))
     while True:

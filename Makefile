@@ -1,35 +1,35 @@
-checkfiles = fastapi_limiter/ tests/ examples/ conftest.py
-py_warn = PYTHONDEVMODE=1
+.DEFAULT_GOAL := help
+SHELL := /bin/bash
 
-help:
-	@echo "fastapi-limiter development makefile"
-	@echo
-	@echo  "usage: make <target>"
-	@echo  "Targets:"
-	@echo  "    up			Updates dev/test dependencies"
-	@echo  "    deps		Ensure dev/test dependencies are installed"
-	@echo  "    check		Checks that build is sane"
-	@echo  "    build		Build package"
-	@echo  "    test		Runs all tests"
-	@echo  "    style		Auto-formats the code"
 
-up:
-	@uv sync --upgrade
+.PHONY: install ## install required dependencies on bare metal
+install:
+	uv sync --refresh
 
-deps:
-	@uv sync --all-groups
 
-style: deps
-	@uv run ruff format $(checkfiles)
+.PHONY: format ## Run the formatter on bare metal
+format:
+	uv run tox -e format
 
-check: deps
-	@uv run ruff check $(checkfiles)
-	@uv run ty check $(checkfiles)
 
-test: deps
-	@$(py_warn) uv run pytest
+.PHONY: lint ## run the linter on bare metal
+lint:
+	uv run tox -e lint
 
-build: deps
-	@uv build
 
-ci: check test
+.PHONY: test ## run unit tests on bare metal
+test:
+	uv run tox -e test
+
+
+.PHONY: publish ## Build & publish the package to Nexus. Ensure to have UV_PUBLISH_USERNAME & UV_PUBLISH_PASSWORD environment variables set.
+publish:
+	@version=$$(grep '^version *= *' pyproject.toml | head -1 | sed 's/version *= *"\(.*\)"/\1/'); \
+	echo "Current version: $$version"; \
+	read -p "Publish version $$version? (y/n): " confirm; \
+	if [ "$$confirm" = "y" ]; then \
+		uv build --no-sources && \
+		uv publish --verbose; \
+	else \
+		echo "Publish cancelled."; \
+	fi

@@ -1,12 +1,15 @@
+"""Integration-style tests for dependency and middleware rate limiting."""
+
 from time import sleep
 
 from starlette.testclient import TestClient
 
-from examples.main import app
-from examples.middleware import app as middleware_app
+from tests.examples.main import app
+from tests.examples.middleware import app as middleware_app
 
 
 def test_limiter():
+    """Validate per-route request limits for GET and POST endpoints."""
     with TestClient(app) as client:
         response = client.get("/")
         assert response.status_code == 200
@@ -32,6 +35,7 @@ def test_limiter():
 
 
 def test_limiter_multiple():
+    """Validate behavior when multiple limiters apply to one endpoint."""
     with TestClient(app) as client:
         response = client.get("/multiple")
         assert response.status_code == 200
@@ -52,6 +56,7 @@ def test_limiter_multiple():
 
 
 def test_limiter_websockets():
+    """Validate WebSocket rate limiting with context keys."""
     with TestClient(app) as client:
         with client.websocket_connect("/ws") as ws:
             ws.send_text("Hi")
@@ -69,6 +74,7 @@ def test_limiter_websockets():
 
 
 def test_skip_limiter():
+    """Validate routes configured to skip limiting are never blocked."""
     with TestClient(app) as client:
         for _ in range(5):
             response = client.get("/skip")
@@ -76,6 +82,7 @@ def test_skip_limiter():
 
 
 def test_middleware():
+    """Validate middleware-level limiting across different routes."""
     with TestClient(middleware_app) as client:
         response = client.get("/")
         assert response.status_code == 200
