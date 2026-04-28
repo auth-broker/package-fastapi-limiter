@@ -2,12 +2,11 @@
 
 from time import sleep
 
-import pytest
-from fastapi import HTTPException
 from starlette.testclient import TestClient
 
 from tests.examples.main import app
 from tests.examples.middleware import app as middleware_app
+from tests.examples.path_based_middleware import app as path_based_middleware_app
 
 
 def test_limiter():
@@ -103,4 +102,34 @@ def test_middleware():
         sleep(5)
 
         response = client.get("/")
+        assert response.status_code == 200
+
+
+def test_path_based_middleware():
+    """Validate middleware-level limiting across different routes."""
+    with TestClient(path_based_middleware_app) as client:
+        response = client.get("/")
+        assert response.status_code == 200
+        response = client.get("/")
+        assert response.status_code == 200
+        response = client.get("/path/based/1")
+        assert response.status_code == 200
+        response = client.get("/path/based/2")
+        assert response.status_code == 200
+
+        # Global limit of 2 per 5s reached for /path/based, but not for other paths
+        response = client.get("/")
+        assert response.status_code == 200
+        response = client.get("/path/based/1")
+        assert response.status_code == 429
+        response = client.get("/path/based/2")
+        assert response.status_code == 429
+
+        sleep(5)
+
+        response = client.get("/")
+        assert response.status_code == 200
+        response = client.get("/path/based/1")
+        assert response.status_code == 200
+        response = client.get("/path/based/2")
         assert response.status_code == 200
