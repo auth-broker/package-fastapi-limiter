@@ -39,7 +39,7 @@ jobs:
           git config --global url."https://${GH_READ_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
       - name: Sync deps
-        run: uv sync --extra all
+        run: uv sync
 
       - name: Lint
         run: uv run tox -e lint
@@ -68,7 +68,7 @@ jobs:
           git config --global url."https://${GH_READ_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
       - name: Sync deps
-        run: uv sync --extra all
+        run: uv sync
 
       - name: Test
         run: uv run tox -e test
