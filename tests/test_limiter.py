@@ -93,12 +93,12 @@ def test_middleware():
         assert response.status_code == 200
 
         # Global limit of 2 per 5s reached
-        with pytest.raises(HTTPException, match="Too Many Requests"):
-            client.get("/")
+        response = client.get("/")
+        assert response.status_code == 429
 
         # Different path but same global limiter
-        with pytest.raises(HTTPException, match="Too Many Requests"):
-            client.get("/other")
+        response = client.get("/other")
+        assert response.status_code == 429
 
         sleep(5)
 
