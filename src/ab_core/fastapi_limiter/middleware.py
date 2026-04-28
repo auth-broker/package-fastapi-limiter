@@ -1,5 +1,9 @@
 """Middleware-based rate limiting for FastAPI applications."""
 
+import re
+from collections.abc import Sequence
+from re import Pattern
+
 from pyrate_limiter import Limiter
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
@@ -44,19 +48,32 @@ class RateLimiterMiddleware(BaseHTTPMiddleware):
 
 
 class PathBasedRateLimiterMiddleware(RateLimiterMiddleware):
-    """Apply path-based rate limiting to all incoming requests in middleware."""
+    """Apply path-based or pattern-based rate limiting to matching paths."""
 
     def __init__(
         self,
         app,
         *,
         limiter: Limiter,
-        path_prefix: str,
+        path_prefix: str | None = None,
+        path_pattern: str | Pattern[str] | None = None,
+        path_prefixes: Sequence[str] | None = None,
+        path_patterns: Sequence[str | Pattern[str]] | None = None,
         identifier: Identifier = default_identifier,
         callback: MiddlewareCallback = default_middleware_callback,
         blocking: bool = False,
     ):
-        """Create middleware with limiter and callback settings."""
+        """Initialize the path-based rate limiter middleware."""
+        all_prefixes = tuple(
+            prefix for prefix in ([path_prefix] if path_prefix is not None else []) + list(path_prefixes or [])
+        )
+        raw_patterns = ([path_pattern] if path_pattern is not None else []) + list(path_patterns or [])
+        all_patterns = tuple(re.compile(pattern) if isinstance(pattern, str) else pattern for pattern in raw_patterns)
+        if not all_prefixes and not all_patterns:
+            raise ValueError(
+                "At least one of path_prefix, path_pattern, path_prefixes, or path_patterns must be provided"
+            )
+
         super().__init__(
             app,
             limiter=limiter,
@@ -65,8 +82,16 @@ class PathBasedRateLimiterMiddleware(RateLimiterMiddleware):
             blocking=blocking,
             skip=self.skip,
         )
-        self.path_prefix = path_prefix
+
+        self.path_prefixes = all_prefixes
+        self.path_patterns = all_patterns
 
     async def skip(self, request: Request | WebSocket) -> bool:
-        """Skip rate limiting for the dedicated skip route."""
-        return not request.scope["path"].startswith(self.path_prefix)
+        """Determine whether to skip rate limiting based on the request path."""
+        path = request.scope["path"]
+
+        matches_prefix = any(path.startswith(prefix) for prefix in self.path_prefixes)
+
+        matches_pattern = any(pattern.search(path) is not None for pattern in self.path_patterns)
+
+        return not (matches_prefix or matches_pattern)
