@@ -2,6 +2,8 @@
 
 from time import sleep
 
+import pytest
+from fastapi import HTTPException
 from starlette.testclient import TestClient
 
 from tests.examples.main import app
@@ -91,12 +93,12 @@ def test_middleware():
         assert response.status_code == 200
 
         # Global limit of 2 per 5s reached
-        response = client.get("/")
-        assert response.status_code == 429
+        with pytest.raises(HTTPException, match="Too Many Requests"):
+            client.get("/")
 
         # Different path but same global limiter
-        response = client.get("/other")
-        assert response.status_code == 429
+        with pytest.raises(HTTPException, match="Too Many Requests"):
+            client.get("/other")
 
         sleep(5)
 
