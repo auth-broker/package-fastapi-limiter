@@ -275,6 +275,50 @@ async def index():
 
 `RateLimiterMiddleware` accepts the same `identifier`, `callback`, `blocking`, and `skip` parameters as `RateLimiter`.
 
+### Path-based middleware
+
+Use `PathBasedRateLimiterMiddleware` when you only want middleware rate limiting to apply to routes under a specific prefix.
+
+```py
+from fastapi import FastAPI
+from pyrate_limiter import Duration, Limiter, Rate
+
+from ab_core.fastapi_limiter.middleware import PathBasedRateLimiterMiddleware
+
+app = FastAPI()
+
+app.add_middleware(
+    PathBasedRateLimiterMiddleware,
+    limiter=Limiter(Rate(2, Duration.SECOND * 5)),
+    path_prefix="/path/based",
+)
+
+
+@app.get("/")
+async def index():
+    return {"msg": "Not rate limited by this middleware"}
+
+
+@app.get("/path/based/1")
+async def path_based_route_1():
+    return {"msg": "Rate limited"}
+
+
+@app.get("/path/based/2")
+async def path_based_route_2():
+    return {"msg": "Rate limited"}
+```
+
+`PathBasedRateLimiterMiddleware` accepts:
+
+- `limiter`: Required `pyrate_limiter.Limiter` instance.
+- `path_prefix`: Required string prefix used to decide which request paths are rate limited.
+- `identifier`: Optional identifier callable (defaults to `default_identifier`).
+- `callback`: Optional callback callable when the limit is exceeded (defaults to `default_middleware_callback`).
+- `blocking`: Optional bool passed to `try_acquire_async` (defaults to `False`).
+
+Routes not starting with `path_prefix` are skipped by this middleware.
+
 ### Rate limiting within a websocket
 
 While the above examples work with REST requests, FastAPI also allows easy usage
