@@ -1,9 +1,6 @@
-NOTE: This is a fork of (https://github.com/long2ice/fastapi-limiter), currently because the original maintainer [@long2ice](https://github.com/long2ice) has not published the latest version which supports FastAPI middleware.
-
 <div align="center">
 
-# AB FastAPI Limiter
-
+# FastAPI Limiter
 FastAPI-Limiter is a rate limiting tool for [fastapi](https://github.com/tiangolo/fastapi) routes, powered by [pyrate-limiter](https://github.com/vutran1710/PyrateLimiter).
 
 ![Python](https://img.shields.io/badge/Python-3.12-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
@@ -22,6 +19,11 @@ FastAPI-Limiter is a rate limiting tool for [fastapi](https://github.com/tiangol
 [![CI](https://github.com/auth-broker/package-fastapi-limiter/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/auth-broker/package-fastapi-limiter/actions/workflows/ci.yaml)
 
 </div>
+
+NOTE: This is a fork of (https://github.com/long2ice/fastapi-limiter), currently because the original maintainer [@long2ice](https://github.com/long2ice) has not published the latest version which supports FastAPI middleware.
+
+[<img width="1662" height="470" alt="image" src="https://github.com/user-attachments/assets/aaa72fd0-56e5-4b04-bb7d-848e630ea95b" />](https://github.com/long2ice/fastapi-limiter/actions)
+
 
 ______________________________________________________________________
 
