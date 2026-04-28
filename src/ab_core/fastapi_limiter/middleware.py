@@ -1,5 +1,8 @@
 """Middleware-based rate limiting for FastAPI applications."""
 
+import re
+from re import Pattern
+
 from pyrate_limiter import Limiter
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
@@ -44,19 +47,25 @@ class RateLimiterMiddleware(BaseHTTPMiddleware):
 
 
 class PathBasedRateLimiterMiddleware(RateLimiterMiddleware):
-    """Apply path-based rate limiting to all incoming requests in middleware."""
+    """Apply path-based or pattern-based rate limiting to all incoming requests."""
 
     def __init__(
         self,
         app,
         *,
         limiter: Limiter,
-        path_prefix: str,
+        path_prefix: str | None = None,
+        path_pattern: str | Pattern[str] | None = None,
         identifier: Identifier = default_identifier,
         callback: MiddlewareCallback = default_middleware_callback,
         blocking: bool = False,
     ):
-        """Create middleware with limiter and callback settings."""
+        """Initialize the path-based rate limiter middleware."""
+        if not path_prefix and not path_pattern:
+            raise ValueError("Either path_prefix or path_pattern must be provided")
+        if path_prefix and path_pattern:
+            raise ValueError("Provide only one of path_prefix or path_pattern")
+
         super().__init__(
             app,
             limiter=limiter,
@@ -65,8 +74,23 @@ class PathBasedRateLimiterMiddleware(RateLimiterMiddleware):
             blocking=blocking,
             skip=self.skip,
         )
+
         self.path_prefix = path_prefix
+        if isinstance(path_pattern, str):
+            self.path_pattern: Pattern[str] | None = re.compile(path_pattern)
+        else:
+            self.path_pattern = path_pattern
 
     async def skip(self, request: Request | WebSocket) -> bool:
-        """Skip rate limiting for the dedicated skip route."""
-        return not request.scope["path"].startswith(self.path_prefix)
+        """Determine whether to skip rate limiting based on the request path."""
+        path = request.scope["path"]
+
+        # Prefix mode (fast)
+        if self.path_prefix is not None:
+            return not path.startswith(self.path_prefix)
+
+        # Regex mode (flexible)
+        if self.path_pattern is not None:
+            return self.path_pattern.search(path) is None
+
+        return True  # fallback safety
