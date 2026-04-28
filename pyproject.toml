@@ -20,7 +20,7 @@ dev = [
 
 [project]
 name = "ab-fastapi-limiter"
-version = "0.2.1"
+version = "0.2.2"
 description = "A request rate limiter for fastapi"
 authors = [
     { name = "long2ice", email = "long2ice@gmail.com" },

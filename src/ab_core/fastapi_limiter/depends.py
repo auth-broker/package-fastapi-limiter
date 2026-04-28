@@ -5,16 +5,16 @@ from starlette.requests import Request
 from starlette.responses import Response
 from starlette.websockets import WebSocket
 
-from ab_core.fastapi_limiter.callback import default_callback
-from ab_core.fastapi_limiter.identifier import default_identifier
+from ab_core.fastapi_limiter.callback import Callback, default_callback
+from ab_core.fastapi_limiter.identifier import Identifier, default_identifier
 
 
 class _BaseRateLimiter:
     def __init__(
         self,
         limiter: Limiter,
-        identifier=default_identifier,
-        callback=default_callback,
+        identifier: Identifier = default_identifier,
+        callback: Callback = default_callback,
         blocking: bool = False,
         skip=None,
     ):
