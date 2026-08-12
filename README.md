@@ -6,6 +6,21 @@ A request rate limiter for FastAPI, built on top of
 This package is a modernized fork of `fastapi-limiter` with the import namespace
 standardized to `fastapi_rate_limiter`.
 
+## Migration from auth-broker
+
+As of `fastapi-rate-limiter` version `0.2.4`, this package has moved out of the
+`auth-broker` organisation, been renamed, and had its import namespace updated.
+
+| Item | Previous | Current |
+| --- | --- | --- |
+| GitHub repository | [`auth-broker/package-fastapi-limiter`](https://github.com/auth-broker/package-fastapi-limiter) | [`mattcoulter7/fastapi-rate-limiter`](https://github.com/mattcoulter7/fastapi-rate-limiter) |
+| PyPI package | [`ab-fastapi-limiter`](https://pypi.org/project/ab-fastapi-limiter/) | [`fastapi-rate-limiter`](https://pypi.org/project/fastapi-rate-limiter/) |
+| Install command | `pip install ab-fastapi-limiter` | `pip install fastapi-rate-limiter` |
+| Import namespace | `ab_core.fastapi_limiter` | `fastapi_rate_limiter` |
+
+The old PyPI package is retained as an archived historical package. New work
+should use `fastapi-rate-limiter` and `fastapi_rate_limiter`.
+
 ## Installation
 
 ```bash
