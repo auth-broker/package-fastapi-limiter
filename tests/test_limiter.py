@@ -52,20 +52,19 @@ def test_limiter_multiple():
 
 
 def test_limiter_websockets():
-    with TestClient(app) as client:
-        with client.websocket_connect("/ws") as ws:
-            ws.send_text("Hi")
-            data = ws.receive_text()
-            assert data == "Hello, world"
+    with TestClient(app) as client, client.websocket_connect("/ws") as ws:
+        ws.send_text("Hi")
+        data = ws.receive_text()
+        assert data == "Hello, world"
 
-            ws.send_text("Hi")
-            data = ws.receive_text()
-            assert data == "Hello again"
+        ws.send_text("Hi")
+        data = ws.receive_text()
+        assert data == "Hello again"
 
-            ws.send_text("Hi 2")
-            data = ws.receive_text()
-            assert data == "Hello again"
-            ws.close()
+        ws.send_text("Hi 2")
+        data = ws.receive_text()
+        assert data == "Hello again"
+        ws.close()
 
 
 def test_skip_limiter():

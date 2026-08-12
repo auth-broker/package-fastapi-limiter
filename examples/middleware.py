@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.requests import Request
 from pyrate_limiter import Duration, Limiter, Rate
 
-from fastapi_limiter.middleware import RateLimiterMiddleware
+from fastapi_rate_limiter.middleware import RateLimiterMiddleware
 
 app = FastAPI()
 

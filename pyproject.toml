@@ -1,49 +1,53 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[dependency-groups]
+dev = [
+    "debugpy>=1.8.14,<2",
+    "isort>=6.0.1,<7",
+    "pre-commit>=4.2.0,<5",
+    "uvicorn",
+    "pytest>=8.4.1,<9",
+    "pytest-asyncio>=1.4.0,<2",
+    "pytest-mock",
+    "pytest-xdist",
+    "requests",
+    "httpx",
+    "ruff>=0.12.3,<0.17",
+]
+
 [project]
-name = "fastapi-limiter"
-version = "0.2.0"
+name = "fastapi-rate-limiter"
+version = "0.2.3"
 description = "A request rate limiter for fastapi"
-authors = [{ name = "long2ice", email = "long2ice@gmail.com" }]
-requires-python = ">=3.9,<4"
+authors = [
+    { name = "long2ice", email = "long2ice@gmail.com" },
+    { name = "mattcoulter7", email = "mattcoul7@gmail.com" }
+]
+requires-python = ">=3.12,<4"
 readme = "README.md"
 license = "Apache-2.0"
 keywords = ["fastapi", "limiter"]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
 ]
-dependencies = ["fastapi", "pyrate-limiter>=3.9.0"]
+dependencies = [
+    "fastapi",
+    "pyrate-limiter>=3.9.0",
+]
 
 [project.urls]
-Homepage = "https://github.com/long2ice/fastapi-limiter"
-Repository = "https://github.com/long2ice/fastapi-limiter.git"
-Documentation = "https://github.com/long2ice/fastapi-limiter"
+Homepage = "https://github.com/mattcoulter7/fastapi-rate-limiter"
+Repository = "https://github.com/mattcoulter7/fastapi-rate-limiter.git"
+Documentation = "https://github.com/mattcoulter7/fastapi-rate-limiter"
 
-[dependency-groups]
-dev = [
-    "uvicorn",
-    "ruff",
-    "ty",
-    "pytest",
-    "pytest-asyncio",
-    "pytest-mock",
-    "pytest-xdist",
-    "requests",
-    "httpx",
-]
+[tool.hatch.build.targets.sdist]
+include = ["src/fastapi_rate_limiter"]
 
-[tool.uv.build-backend]
-module-name = ["fastapi_limiter"]
-module-root = ""
-source-include = ["CHANGELOG.md", "LICENSE", "README.md"]
-
-[build-system]
-requires = ["uv_build>=0.9.26,<0.10.0"]
-build-backend = "uv_build"
+[tool.hatch.build.targets.wheel]
+packages = ["src/fastapi_rate_limiter"]
 
 [tool.pytest.ini_options]
 asyncio_default_fixture_loop_scope = "session"

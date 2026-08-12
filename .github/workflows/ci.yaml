@@ -1,0 +1,75 @@
+name: CI
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }} - ci-pipeline"
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          python-version: "3.12"
+
+      # Private Git deps (optional; remove if not needed)
+      - name: Configure Git credentials for private deps
+        if: env.GH_READ_TOKEN != ''
+        env:
+          GH_READ_TOKEN: ${{ secrets.GH_READ_TOKEN }}
+        run: |
+          git config --global url."https://${GH_READ_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+      - name: Install Python
+        run: uv python install
+
+      - name: Sync deps
+        run: uv sync
+
+      - name: Lint
+        run: |
+          uv run ruff check
+          uv run ruff format --check
+
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          python-version: "3.12"
+
+      - name: Configure Git credentials for private deps
+        if: env.GH_READ_TOKEN != ''
+        env:
+          GH_READ_TOKEN: ${{ secrets.GH_READ_TOKEN }}
+        run: |
+          git config --global url."https://${GH_READ_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+      - name: Install Python
+        run: uv python install
+
+      - name: Sync deps
+        run: uv sync
+
+      - name: Test
+        run: uv run pytest -v -m "not integration"
