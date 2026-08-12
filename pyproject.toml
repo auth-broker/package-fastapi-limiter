@@ -39,9 +39,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/mattcoulter7/fastapi-rate-limiter"
-Repository = "https://github.com/mattcoulter7/fastapi-rate-limiter.git"
-Documentation = "https://github.com/mattcoulter7/fastapi-rate-limiter"
+Homepage = "https://github.com/mattcoulter7/fastapi-relax"
+Repository = "https://github.com/mattcoulter7/fastapi-relax.git"
+Documentation = "https://github.com/mattcoulter7/fastapi-relax"
 
 [tool.hatch.build.targets.sdist]
 include = ["src/fastapi_relax"]

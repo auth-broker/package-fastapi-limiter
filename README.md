@@ -13,7 +13,7 @@ As of `fastapi-relax` version `0.2.4`, this package has moved out of the
 
 | Item | Previous | Current |
 | --- | --- | --- |
-| GitHub repository | [`auth-broker/package-fastapi-limiter`](https://github.com/auth-broker/package-fastapi-limiter) | [`mattcoulter7/fastapi-rate-limiter`](https://github.com/mattcoulter7/fastapi-rate-limiter) |
+| GitHub repository | [`auth-broker/package-fastapi-limiter`](https://github.com/auth-broker/package-fastapi-limiter) | [`mattcoulter7/fastapi-relax`](https://github.com/mattcoulter7/fastapi-relax) |
 | PyPI package | [`ab-fastapi-limiter`](https://pypi.org/project/ab-fastapi-limiter/) | [`fastapi-relax`](https://pypi.org/project/fastapi-relax/) |
 | Install command | `pip install ab-fastapi-limiter` | `pip install fastapi-relax` |
 | Import namespace | `ab_core.fastapi_limiter` | `fastapi_relax` |
