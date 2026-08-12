@@ -5,8 +5,9 @@ from starlette.requests import Request
 from starlette.responses import Response
 from starlette.websockets import WebSocket
 
-from ab_core.fastapi_limiter.callback import Callback, default_callback
-from ab_core.fastapi_limiter.identifier import Identifier, default_identifier
+from fastapi_rate_limiter.callback import Callback, default_callback
+from fastapi_rate_limiter.identifier import Identifier, default_identifier
+from fastapi_rate_limiter.skip import Skip
 
 
 class _BaseRateLimiter:
@@ -16,7 +17,7 @@ class _BaseRateLimiter:
         identifier: Identifier = default_identifier,
         callback: Callback = default_callback,
         blocking: bool = False,
-        skip=None,
+        skip: Skip | None = None,
     ):
         self.limiter = limiter
         self.identifier = identifier
@@ -28,7 +29,7 @@ class _BaseRateLimiter:
 class RateLimiter(_BaseRateLimiter):
     """Rate-limit HTTP requests when used as a dependency."""
 
-    async def __call__(self, request: Request, response: Response):
+    async def __call__(self, request: Request, response: Response) -> None:
         """Enforce the configured rate limit for the current request."""
         if self.skip and await self.skip(request):
             return
@@ -41,7 +42,7 @@ class RateLimiter(_BaseRateLimiter):
 class WebSocketRateLimiter(_BaseRateLimiter):
     """Rate-limit WebSocket messages keyed by connection and context."""
 
-    async def __call__(self, ws: WebSocket, context_key: str = ""):
+    async def __call__(self, ws: WebSocket, context_key: str = "") -> None:
         """Enforce the configured rate limit for a WebSocket operation."""
         if self.skip and await self.skip(ws):
             return

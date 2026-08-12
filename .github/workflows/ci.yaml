@@ -6,6 +6,7 @@ permissions:
 
 on:
   pull_request:
+  push:
     branches: [main]
 
 concurrency:
@@ -14,19 +15,15 @@ concurrency:
 
 jobs:
   lint:
-    if: ${{ github.actor != 'dependabot[bot]' }}
-    runs-on:
-      group: Default
+    runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      # Install uv + Python (with cache)
       - name: Install uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@v7
         with:
-          version: latest
           enable-cache: true
           python-version: "3.12"
 
@@ -38,25 +35,26 @@ jobs:
         run: |
           git config --global url."https://${GH_READ_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
+      - name: Install Python
+        run: uv python install
+
       - name: Sync deps
         run: uv sync
 
       - name: Lint
-        run: uv run tox -e lint
+        run: |
+          uv run ruff check
+          uv run ruff format --check
 
   test:
-    if: ${{ github.actor != 'dependabot[bot]' }}
-    runs-on:
-      group: Default
+    runs-on: ubuntu-latest
     timeout-minutes: 5
-    # Run in parallel with lint (remove this 'needs' to keep parallel; add needs: [lint] to serialize)
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@v7
         with:
-          version: latest
           enable-cache: true
           python-version: "3.12"
 
@@ -67,8 +65,11 @@ jobs:
         run: |
           git config --global url."https://${GH_READ_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
+      - name: Install Python
+        run: uv python install
+
       - name: Sync deps
         run: uv sync
 
       - name: Test
-        run: uv run tox -e test
+        run: uv run pytest -v -m "not integration"

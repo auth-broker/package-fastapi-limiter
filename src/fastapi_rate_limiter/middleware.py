@@ -65,10 +65,17 @@ class PathBasedRateLimiterMiddleware(RateLimiterMiddleware):
     ):
         """Initialize the path-based rate limiter middleware."""
         all_prefixes = tuple(
-            prefix for prefix in ([path_prefix] if path_prefix is not None else []) + list(path_prefixes or [])
+            prefix
+            for prefix in ([path_prefix] if path_prefix is not None else [])
+            + list(path_prefixes or [])
         )
-        raw_patterns = ([path_pattern] if path_pattern is not None else []) + list(path_patterns or [])
-        all_patterns = tuple(re.compile(pattern) if isinstance(pattern, str) else pattern for pattern in raw_patterns)
+        raw_patterns = ([path_pattern] if path_pattern is not None else []) + list(
+            path_patterns or []
+        )
+        all_patterns = tuple(
+            re.compile(pattern) if isinstance(pattern, str) else pattern
+            for pattern in raw_patterns
+        )
         if not all_prefixes and not all_patterns:
             raise ValueError(
                 "At least one of path_prefix, path_pattern, path_prefixes, or path_patterns must be provided"
@@ -92,6 +99,8 @@ class PathBasedRateLimiterMiddleware(RateLimiterMiddleware):
 
         matches_prefix = any(path.startswith(prefix) for prefix in self.path_prefixes)
 
-        matches_pattern = any(pattern.search(path) is not None for pattern in self.path_patterns)
+        matches_pattern = any(
+            pattern.search(path) is not None for pattern in self.path_patterns
+        )
 
         return not (matches_prefix or matches_pattern)
