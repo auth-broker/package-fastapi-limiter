@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 from pyrate_limiter import Duration, Limiter, Rate
 
-from fastapi_rate_limiter.middleware import PathBasedRateLimiterMiddleware
+from fastapi_relax.middleware import PathBasedRateLimiterMiddleware
 
 app = FastAPI()
 

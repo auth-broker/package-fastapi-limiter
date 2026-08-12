@@ -1,38 +1,38 @@
-# FastAPI Rate Limiter
+# FastAPI Relax
 
 A request rate limiter for FastAPI, built on top of
 [`pyrate-limiter`](https://github.com/vutran1710/PyrateLimiter).
 
 This package is a modernized fork of `fastapi-limiter` with the import namespace
-standardized to `fastapi_rate_limiter`.
+standardized to `fastapi_relax`.
 
 ## Migration from auth-broker
 
-As of `fastapi-rate-limiter` version `0.2.4`, this package has moved out of the
+As of `fastapi-relax` version `0.2.4`, this package has moved out of the
 `auth-broker` organisation, been renamed, and had its import namespace updated.
 
 | Item | Previous | Current |
 | --- | --- | --- |
-| GitHub repository | [`auth-broker/package-fastapi-limiter`](https://github.com/auth-broker/package-fastapi-limiter) | [`mattcoulter7/fastapi-rate-limiter`](https://github.com/mattcoulter7/fastapi-rate-limiter) |
-| PyPI package | [`ab-fastapi-limiter`](https://pypi.org/project/ab-fastapi-limiter/) | [`fastapi-rate-limiter`](https://pypi.org/project/fastapi-rate-limiter/) |
-| Install command | `pip install ab-fastapi-limiter` | `pip install fastapi-rate-limiter` |
-| Import namespace | `ab_core.fastapi_limiter` | `fastapi_rate_limiter` |
+| GitHub repository | [`auth-broker/package-fastapi-limiter`](https://github.com/auth-broker/package-fastapi-limiter) | [`mattcoulter7/fastapi-relax`](https://github.com/mattcoulter7/fastapi-relax) |
+| PyPI package | [`ab-fastapi-limiter`](https://pypi.org/project/ab-fastapi-limiter/) | [`fastapi-relax`](https://pypi.org/project/fastapi-relax/) |
+| Install command | `pip install ab-fastapi-limiter` | `pip install fastapi-relax` |
+| Import namespace | `ab_core.fastapi_limiter` | `fastapi_relax` |
 
 The old PyPI package is retained as an archived historical package. New work
-should use `fastapi-rate-limiter` and `fastapi_rate_limiter`.
+should use `fastapi-relax` and `fastapi_relax`.
 
 ## Installation
 
 ```bash
-pip install fastapi-rate-limiter
+pip install fastapi-relax
 ```
 
 ```bash
-uv add fastapi-rate-limiter
+uv add fastapi-relax
 ```
 
 ```bash
-poetry add fastapi-rate-limiter
+poetry add fastapi-relax
 ```
 
 ## Dependency-Based Limiting
@@ -41,7 +41,7 @@ poetry add fastapi-rate-limiter
 from fastapi import Depends, FastAPI
 from pyrate_limiter import Duration, Limiter, Rate
 
-from fastapi_rate_limiter.depends import RateLimiter
+from fastapi_relax.depends import RateLimiter
 
 app = FastAPI()
 
@@ -62,7 +62,7 @@ async def index():
 from fastapi import Depends, FastAPI
 from pyrate_limiter import Duration, Limiter, Rate
 
-from fastapi_rate_limiter.depends import RateLimiter
+from fastapi_relax.depends import RateLimiter
 
 app = FastAPI()
 
@@ -85,7 +85,7 @@ from fastapi import Depends, FastAPI
 from fastapi.requests import Request
 from pyrate_limiter import Duration, Limiter, Rate
 
-from fastapi_rate_limiter.depends import RateLimiter
+from fastapi_relax.depends import RateLimiter
 
 app = FastAPI()
 
@@ -115,7 +115,7 @@ async def skip_route():
 from fastapi import FastAPI
 from pyrate_limiter import Duration, Limiter, Rate
 
-from fastapi_rate_limiter.middleware import RateLimiterMiddleware
+from fastapi_relax.middleware import RateLimiterMiddleware
 
 app = FastAPI()
 
@@ -131,7 +131,7 @@ app.add_middleware(
 from fastapi import FastAPI
 from pyrate_limiter import Duration, Limiter, Rate
 
-from fastapi_rate_limiter.middleware import PathBasedRateLimiterMiddleware
+from fastapi_relax.middleware import PathBasedRateLimiterMiddleware
 
 app = FastAPI()
 
@@ -159,7 +159,7 @@ from fastapi import FastAPI, HTTPException, WebSocket
 from pyrate_limiter import Duration, Limiter, Rate
 from starlette.websockets import WebSocketDisconnect
 
-from fastapi_rate_limiter.depends import WebSocketRateLimiter
+from fastapi_relax.depends import WebSocketRateLimiter
 
 app = FastAPI()
 

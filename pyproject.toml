@@ -18,7 +18,7 @@ dev = [
 ]
 
 [project]
-name = "fastapi-rate-limiter"
+name = "fastapi-relax"
 version = "0.2.4"
 description = "A request rate limiter for fastapi"
 authors = [
@@ -39,15 +39,15 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/mattcoulter7/fastapi-rate-limiter"
-Repository = "https://github.com/mattcoulter7/fastapi-rate-limiter.git"
-Documentation = "https://github.com/mattcoulter7/fastapi-rate-limiter"
+Homepage = "https://github.com/mattcoulter7/fastapi-relax"
+Repository = "https://github.com/mattcoulter7/fastapi-relax.git"
+Documentation = "https://github.com/mattcoulter7/fastapi-relax"
 
 [tool.hatch.build.targets.sdist]
-include = ["src/fastapi_rate_limiter"]
+include = ["src/fastapi_relax"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/fastapi_rate_limiter"]
+packages = ["src/fastapi_relax"]
 
 [tool.pytest.ini_options]
 asyncio_default_fixture_loop_scope = "session"

@@ -4,7 +4,7 @@ from fastapi.requests import Request
 from pyrate_limiter import Duration, Limiter, Rate
 from starlette.websockets import WebSocketDisconnect
 
-from fastapi_rate_limiter.depends import RateLimiter, WebSocketRateLimiter
+from fastapi_relax.depends import RateLimiter, WebSocketRateLimiter
 
 app = FastAPI()
 

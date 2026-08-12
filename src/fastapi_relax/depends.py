@@ -5,9 +5,9 @@ from starlette.requests import Request
 from starlette.responses import Response
 from starlette.websockets import WebSocket
 
-from fastapi_rate_limiter.callback import Callback, default_callback
-from fastapi_rate_limiter.identifier import Identifier, default_identifier
-from fastapi_rate_limiter.skip import Skip
+from fastapi_relax.callback import Callback, default_callback
+from fastapi_relax.identifier import Identifier, default_identifier
+from fastapi_relax.skip import Skip
 
 
 class _BaseRateLimiter:
